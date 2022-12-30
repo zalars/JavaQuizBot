@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" monitorInterval="5">
+
+    <Properties>
+        <Property name="TEMPLATE">
+            <!-- First part in %msg is the method name in parentheses -->
+            %d{yyyy-MM-dd HH:mm:ss.SSS} [%5level] [%17.17thread] [%34.34c{2}] - %msg %n
+        </Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="LogToConsole">
+            <PatternLayout pattern="${TEMPLATE}"/>
+        </Console>
+        <RollingFile name="LogToFile" filePattern="logs/app-%i.log">
+            <PatternLayout>
+                <Pattern>${TEMPLATE}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="5 MB"/>
+            </Policies>
+            <DirectWriteRolloverStrategy maxFiles="10"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <!-- avoid duplicated logs with additivity=false -->
+        <Logger name="zalars" level="info" additivity="false">
+            <AppenderRef ref="LogToConsole"/>
+            <AppenderRef ref="LogToFile"/>
+        </Logger>
+        <Root level="info">
+            <AppenderRef ref="LogToConsole"/>
+            <AppenderRef ref="LogToFile"/>
+        </Root>
+    </Loggers>
+
+</Configuration>
